@@ -1,7 +1,6 @@
+FROM golang:1.12 as builder
+RUN go get -v github.com/schneidexe/debug-httpd
+
 FROM busybox
-
-ADD debug-httpd_linux_amd64 /debug-httpd
-
-RUN chmod a+x /debug-httpd
-
-CMD /debug-httpd
+COPY --from=builder /go/bin/debug-httpd /usr/bin
+CMD debug-httpd
