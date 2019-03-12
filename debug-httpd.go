@@ -2,8 +2,10 @@ package main
 
 import (
     "fmt"
+    "io/ioutil"
     "net/http"
     "os"
+    "regexp"
     "strings"
 )
 
@@ -22,9 +24,22 @@ func handler(w http.ResponseWriter, r *http.Request) {
             fmt.Fprintf(w, "\t\t%s\n", v)
         }
     }
-    fmt.Fprintf(w, "Environment:\n")
+    fmt.Fprintf(w, "\nEnvironment:\n")
     for _, env := range os.Environ() {
-        fmt.Fprintf(w, "\t\t%s\n", env)
+        fmt.Fprintf(w, "\t%s\n", env)
+    }
+
+    if os.Getenv("UPSTREAM") != "" {
+        resp, err := http.Get(os.Getenv("UPSTREAM"))
+        if err != nil {
+
+        }
+        defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        lineStarts := regexp.MustCompile(`(?m:^)`)
+        tabbedBody := lineStarts.ReplaceAllString(string(body), "\t")
+        fmt.Fprintf(w, "\nUpstream response:\n")
+        fmt.Fprintf(w, "%s\n", tabbedBody)
     }
 }
 
