@@ -24,13 +24,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
             fmt.Fprintf(w, "\t\t%s\n", v)
         }
     }
-    fmt.Fprintf(w, "\nEnvironment:\n")
+    fmt.Fprintf(w, "Environment:\n")
     for _, env := range os.Environ() {
         fmt.Fprintf(w, "\t%s\n", env)
     }
 
     if os.Getenv("UPSTREAM") != "" {
-        fmt.Fprintf(w, "\nUpstream response:\n")
+        fmt.Fprintf(w, "Upstream response:\n")
         resp, err := http.Get(os.Getenv("UPSTREAM"))
         if err != nil {
             fmt.Fprintf(w, "\t%s\n", err)
