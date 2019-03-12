@@ -30,15 +30,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
     }
 
     if os.Getenv("UPSTREAM") != "" {
+        fmt.Fprintf(w, "\nUpstream response:\n")
         resp, err := http.Get(os.Getenv("UPSTREAM"))
         if err != nil {
-
+            fmt.Fprintf(w, "\t%s\n", err)
+            return
         }
         defer resp.Body.Close()
         body, err := ioutil.ReadAll(resp.Body)
         lineStarts := regexp.MustCompile(`(?m:^)`)
         tabbedBody := lineStarts.ReplaceAllString(string(body), "\t")
-        fmt.Fprintf(w, "\nUpstream response:\n")
         fmt.Fprintf(w, "%s\n", tabbedBody)
     }
 }
