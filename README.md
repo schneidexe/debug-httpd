@@ -4,7 +4,7 @@ A simple httpd server that helps you debugging data sent to it (esp. headers) e.
 
 ## build
 ```
-docker build -t debug-httpd .
+docker build --no-cache -t debug-httpd .
 ```
 
 ## run
